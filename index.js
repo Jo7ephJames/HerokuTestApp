@@ -3,7 +3,7 @@ var bodyParser = require('body-parser');
 var path = require('path');
 var router = express.Router(); 
 var mongoose = require('mongoose'); //for connecting to Mongo Databse
-var Schedule = require('HerokuTestApp/models/appointmentSchedule.js')
+var Schedule = require('HerokuTestApp/models/appointmentschedule.js')
 var Client = require('HerokuTestApp/models/client.js')
 //twilio phone number +1786-481-4346 //password: dragonCo1nsFromMoonlight
 var accountSid = 'AC89e96cec8801b1fea7d69aaae7981683';
