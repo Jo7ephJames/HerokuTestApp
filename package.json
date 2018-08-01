@@ -1,0 +1,20 @@
+{
+  "name": "appointmentsetter",
+  "version": "1.0.0",
+  "description": "Appointment Setter",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "mocha"
+  },
+  "author": "Joseph James",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "*",
+    "express": "^4.16.3",
+    "mocha": "^5.2.0",
+    "mongoose": "^5.1.4",
+    "nodemailer": "^4.6.7",
+    "twilio": "^3.18.0"
+  }
+}

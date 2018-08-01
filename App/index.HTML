@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+
+<header class='header' class='logo'>
+	<link rel="stylesheet" type="text/css" href="style.css">
+	<div>
+		<!--img class="logo" src="media/logobannerVJ.png" alt="Logo"-->
+	</div>
+</header>
+
+<body>
+
+	<div class='main'>
+		<H1 class= 'title'> 
+		Select the day you would like for your appointment by clicking on the calendar  
+		or click here for <Button id='toggleMonth'>Next Month</Button> 
+		</H1>
+
+		<ul id='calendarUL'>
+		</ul>
+		
+		<ul class='dateTimeRead'>
+			<label> Available Times For Appointment: </label>
+			<label id='selectedDate'></label>
+			<div id='timeDisplay' class= 'timeDisplay'>
+				
+			</div>
+		</ul>
+		
+		<div id='interface' class='interface'>
+			<form id='clientData'>
+				First Name: <br>
+				<input type='text' name='firstName'>
+				Last Name: <br>
+				<input type='text' name='lastName'>
+				E-mail: <br>
+				<input type='email' name='eMail'>
+				Phone Number: <br>
+				<input type='text' name='phoneNumber'>
+				<button type = 'button' onClick='validateFormData()'> Submit </button>
+			</form>
+			<button id='toAdmin' onClick='loadAdmin()'>Go to Admin</button>
+		</div>
+
+		<button onClick='cancelAppointment()'> Cancel a previously set Appointment</button>
+		<br>
+		<div class="capbox">
+
+			<div id="CaptchaDiv"></div>
+
+			<div class="capbox-inner">
+				Type the above number:<br>
+
+				<input type="hidden" id="txtCaptcha">
+				<input type="text" name="CaptchaInput" id="CaptchaInput" size="15"><br>
+			</div>
+		</div>
+<br><br>
+
+	</div>	
+	
+	<script src="appointmentSetter.js"></script>
+</body>

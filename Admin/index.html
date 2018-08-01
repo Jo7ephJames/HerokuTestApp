@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+
+<header class='header' class='logo'>
+	<link rel="stylesheet" type="text/css" href="serverStyle.css">
+	<div>
+		<img class="logo" src="media/logobannerVJ.png" alt="Logo">
+	</div>
+</header>
+
+<body>
+
+	<div class='main'>
+		<H1 class= 'title'> 
+		Appointment Management
+		Click here to manage <button id='toggleMonth'> next Month </button>
+		</H1>
+
+		<ul id='calendarUL'>
+		</ul>
+		
+		<div id='interface' class='interface'>
+			<input id='timeInput' type= 'time' for='timeLabel'>
+			<ul id='timeLabels'></ul>
+			<button id='addTime'> Add Time </button> <button>Clear Schedule</button>
+			
+		</div>
+		<ul class='dateRead'>
+			<label> Set Times For </label>
+				<label id='selectedDate'></label>
+				<ul id='timeDisplay' class= 'timeDisplay'>
+				</ul>
+				<div id='timeDisplayOptions'>
+					<button id='confirmSetAll' style='visibility: hidden'> Confirm </button>
+				</div>
+		</ul>
+		<button onClick= 'loadMain()'>Back to Main</button>
+	</div>	
+	
+	<script src="NodeSetup.js"></script>
+</body>

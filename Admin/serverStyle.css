@@ -1,0 +1,112 @@
+body {
+}
+.main {
+	background-color: white;
+	max-width: 700px;
+	min-height: 650px;
+}
+.logo {
+    display: block;
+    max-width: 700px;
+    margin-left: 30px;
+    background-color: white;
+}
+.stripe {
+	z-index = -1;
+}
+
+.title {
+    font-family: "Times New Roman", Times, serif;
+    margin-left: 40px;
+	font-size: 25px;
+}
+.dateRead {
+	margin-right: 100px;
+	float: right;
+	font-family: "Times New Roman", Times, serif;
+	list-style-type: none;
+}
+.interface {
+	margin-left: 40px;
+}
+.deleteByX {
+	margin-left: 25px;
+}
+label.inputDescription {
+	display: block;
+	padding-bottom: 25px;
+}
+caption {
+	font-family: "Times New Roman", Times, serif;
+	font-size: 25px;
+	border: 1px solid #ccc;
+	background-color: #00ff00;
+}
+table.calendarTable {
+    border: 1px solid #ccc;
+}
+table.timeSelectionTable {
+    border: 1px solid #ccc;
+    align: right;
+}
+.header {
+    background-color: #fafafa;
+    padding: 5px 10px;
+}
+.availableTime {
+	padding: 10px;
+	max-width: 150px;
+}
+.availableTime:hover {
+	border-color: yellow
+	border-width: thin;
+	box-shadow: 2px 2px 2px black;
+	max-width: 100px;
+}
+
+td, th {
+  width: 4rem;
+  height: 2rem;
+  border: 1px solid black;
+  border-width: thin;
+  text-align: center;
+}
+th {
+  background: #00ff00;
+  border-color: white;
+}
+th:hover {
+	border-color: yellow
+	border-width: thin;
+	box-shadow: 1px 1px 1px darkgreen;
+}
+th.selected {
+	border-width: thin;
+	border-color: black;
+	box-shadow: 1px 1px 1px darkblue;
+	background-color: teal;
+}
+td:hover {
+	border-color: yellow
+	border-width: thin;
+	box-shadow: 1px 1px 1px darkgreen;
+}
+td.selected {
+	border-width: thin;
+	border-color: black;
+	box-shadow: 1px 1px 1px darkblue;
+	background-color: teal;
+}
+td.pastDate {
+	font-style: italic;
+	font-weight: 100;
+	font-size: 10px;
+}
+td.noDate {
+	background-color: lightgrey;
+}
+body {
+  padding: 2rem;
+}
+
+
