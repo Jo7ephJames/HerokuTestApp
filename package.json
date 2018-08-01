@@ -4,7 +4,6 @@
   "description": "Appointment Setter",
   "main": "index.js",
   "scripts": {
-    "postinstall": "cd assets && npm install",
     "start": "node index.js",
     "test": "mocha"
   },
