@@ -428,8 +428,8 @@ router.post('/', function(req, res, next) {
 });
 
 
-router.use('/', express.static(path.join('/app', 'App')));
-router.use('/admin', express.static(path.join('/app', 'Admin')));
+router.use('/', express.static(path.join(__dirname + '/App')));
+router.use('/admin', express.static(path.join(__dirname + '/Admin')));
 
 
 // router.get('/', function(req, res, next) {
