@@ -167,12 +167,8 @@ upDate();
 var app = express();
 port =  process.env.PORT || 8080
 
-app.use('/', router);
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json({ type: 'application/*+json' }))
-
-router.use('/', express.static(path.join(__dirname + '/App')));
-router.use('/admin', express.static(path.join(__dirname + '/Admin')));
 
 router.get('/', function(req, res, next) {
 	console.log('Request Recieved');
@@ -432,8 +428,8 @@ router.post('/', function(req, res, next) {
 });
 
 
-//router.use('/', express.static(path.join(__dirname + '/App')));
-//router.use('/admin', express.static(path.join(__dirname + '/Admin')));
+router.use('/', express.static(path.join(__dirname + '/App')));
+router.use('/admin', express.static(path.join(__dirname + '/Admin')));
 
 
 // router.get('/', function(req, res, next) {
@@ -445,7 +441,7 @@ router.post('/', function(req, res, next) {
 // })
 
 //use router for paths
-//app.use('/', router);
+app.use('/', router);
 
 //path.join(__dirname, 'App')
 
