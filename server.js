@@ -40,7 +40,7 @@ transporter.sendMail(helperOptions, function(error, info) {
 })
 
 
-mongoose.connect('mongodb://<dbuser>:<dbpassword>@ds111082.mlab.com:11082/heroku_rgvd5500');
+mongoose.connect('mongodb://heroku_rgvd5500:ug9ibkb780ug1qv0kecvu4sslv@ds111082.mlab.com:11082/heroku_rgvd5500');
 mongoose.connection.once('open', function() {
 	console.log('Connection has been made to database');
 }).on('error', function(error) {
