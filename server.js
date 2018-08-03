@@ -17,7 +17,7 @@ var transporter = nodemailer.createTransport({
 	port: 25,
 	auth: {
 		user: 'janodemailer@gmail.com',
-		pass: 'DragonCo1ns'
+		pass: 'GenericPassword1'
 	},
 	tls: {
 		rejectUnauthorized: false
