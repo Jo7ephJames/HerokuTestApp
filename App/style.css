@@ -30,20 +30,29 @@ body {
 	list-style-type: none;
 }
 .availableTime, {
-	padding: 4px;
-	max-width: 60px;
+	padding: 25px;
+	max-width: 100px;
 }
 .availableTime:hover {
-	border-color: yellow
+	border-radius: 25px;
+	border-color: yellow;
 	border-width: thin;
 	box-shadow: 2px 2px 2px black;
-	max-width: 60px;
+	max-width: 100px;
 }
 .availableTime.selected {
+	border-radius: 25px;
 	border-width: thin;
 	border-color: black;
 	box-shadow: 1px 1px 1px darkblue;
 	background-color: teal;
+	max-width: 100px;
+}
+.timeDisplay {
+	border-color: black;
+	border-radius: 25px;
+	line-height: 300%
+
 }
 .interface {
 	margin-left: 40px;
@@ -106,6 +115,7 @@ body {
   padding: 2rem;
 }
 .capbox {
+	margin-left: 40px;
 	background-color: #92D433;
 	border: #B3E272 0px solid;
 	border-width: 0px 12px 0px 0px;
@@ -137,5 +147,9 @@ body {
 	}
 
 #CaptchaInput { margin: 1px 0px 1px 0px; width: 135px; }
+
+
+
+   
 
 
