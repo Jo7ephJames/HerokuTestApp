@@ -6,11 +6,13 @@ var mongoose = require('mongoose'); //for connecting to Mongo Databse
 var Schedule = require('/app/models/appointmentschedule.js')
 var Client = require('/app/models/client.js')
 //twilio phone number +1786-481-4346 //password: dragonCo1nsFromMoonlight
-var accountSid = 'AC89e96cec8801b1fea7d69aaae7981683';
-var authToken = '01848091aed3e1113e79fb5f2c80fe4a';
-var twilio = require('twilio')(accountSid, authToken);
-var nodemailer = require('nodemailer');
+var Nexmo = require('nexmo');
+var nexmo = new Nexmo({
+	apiKey: 'caf4a2ac',
+	apiSecret: 'uxe10c6xRC1Bxre6',
+})
 
+var nodemailer = require('nodemailer');
 var transporter = nodemailer.createTransport({
 	service: 'gmail',
 	secure: false,
@@ -329,14 +331,14 @@ router.post('/', function(req, res, next) {
 						console.log(info)
 					}
 				});
+				nexmo.message.sendSms(15186460734, '1' + clientData._id, 'Your appointment with James Accounting has been scheduled for ' + clientData.date[0].split('2')[0] + ' '+ getOrdinal(clientData.date[1]) + ' ' + 'at' + ' ' + convertTimeString(clientData.date[2]+''), function(err, responseData) {
+					if(err) {
+						console.log(err);
+					} else {
+						console.log('1' + clientData._id + ': Sent Confirmation Notice')
+					}
+				});
 				res.send('Client Data Saved|'+clientData.date);
-				twilio.messages.create({
-					to: '+1'+ clientData._id,
-					from: '+17864814346',
-					body: 'Your appointment with James Accounting has been scheduled for ' + clientData.date[0].split('2')[0] + ' '+ getOrdinal(clientData.date[1]) + ' ' + 'at' + ' ' + convertTimeString(clientData.date[2]+''), 
-				}).then(function(message) {
-					console.log(message.sid);
-				}).done();
 			} else {
 				if(chkDate === null) {
 					Client.findByIdAndUpdate(clientData._id, {date: clientData.date}).then(function(result) {
@@ -353,13 +355,13 @@ router.post('/', function(req, res, next) {
 								console.log(info)
 							}
 						});
-						twilio.messages.create({
-							to: '+1'+ clientData._id,
-							from: '+17864814346',
-							body: 'Your appointment with James Accounting has been scheduled for ' + clientData.date[0].split('2')[0] + ' '+ getOrdinal(clientData.date[1]) + ' ' + 'at' + ' ' + convertTimeString(clientData.date[2]+''), 
-						}).then(function(message) {
-							console.log(message.sid);
-						}).done();
+						nexmo.message.sendSms(15186460734, '1' + clientData._id , 'Your appointment with James Accounting has been scheduled for ' + clientData.date[0].split('2')[0] + ' '+ getOrdinal(clientData.date[1]) + ' ' + 'at' + ' ' + convertTimeString(clientData.date[2]+''), function(err, responseData) {
+							if(err) {
+								console.log(err);
+							} else {
+								console.log('1' + clientData._id + ': Sent Confirmation Notice');
+							}
+						})
 					})
 					res.send('Client Data Saved|'+clientData.date);
 				} else {
@@ -412,13 +414,13 @@ router.post('/', function(req, res, next) {
 								console.log(info)
 							}
 						});
-						twilio.messages.create({
-							to: '+1'+ phoneNumber,
-							from: '+17864814346',
-							body: 'Your appointment with James Accounting for ' + dateToEdit[0].split('2')[0] + ' '+ getOrdinal(dateToEdit[1]) + ' ' + 'at' + ' ' + convertTimeString(dateToEdit[2]+ ' has been cancelled'), 
-						}).then(function(message) {
-							console.log(message.sid);
-						}).done();	
+						nexmo.message.sendSms(15186460734, '1' + phoneNumber , 'Your appointment with James Accounting for ' + dateToEdit[0].split('2')[0] + ' '+ getOrdinal(dateToEdit[1]) + ' ' + 'at' + ' ' + convertTimeString(dateToEdit[2])+ ' has been cancelled', function(err, responseData) {
+							if(err) {
+								console.log(err);
+							} else {
+								console.log('1' + phoneNumber + ': Sent cancellation notice');
+							}
+						})	
 						res.send('Cancelled')
 					})
 				}
