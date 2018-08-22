@@ -8,8 +8,8 @@ var Client = require('/app/models/client.js')
 //twilio phone number +1786-481-4346 //password: dragonCo1nsFromMoonlight
 var Nexmo = require('nexmo');
 var nexmo = new Nexmo({
-	apiKey: 'caf4a2ac',
-	apiSecret: 'uxe10c6xRC1Bxre6',
+	apiKey: '',
+	apiSecret: '',
 })
 
 var nodemailer = require('nodemailer');
