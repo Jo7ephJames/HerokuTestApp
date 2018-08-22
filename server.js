@@ -8,8 +8,8 @@ var Client = require('/app/models/client.js')
 //twilio phone number +1786-481-4346 //password: dragonCo1nsFromMoonlight
 var Nexmo = require('nexmo');
 var nexmo = new Nexmo({
-	apiKey: '',
-	apiSecret: '',
+	apiKey: process.env.NEXMO_APIKEY,
+	apiSecret: process.env.NEXMO_APISECRET
 })
 
 var nodemailer = require('nodemailer');
@@ -18,8 +18,8 @@ var transporter = nodemailer.createTransport({
 	secure: false,
 	port: 25,
 	auth: {
-		user: 'janodemailer@gmail.com',
-		pass: 'GenericPassword1'
+		user: process.env.NODEMAILER_USER,
+		pass: process.env.NODEMAILER_PASS
 	},
 	tls: {
 		rejectUnauthorized: false
