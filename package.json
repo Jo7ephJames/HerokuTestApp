@@ -4,8 +4,9 @@
   "description": "Appointment Setter",
   "main": "index.js",
   "scripts": {
-    "start": "node server.js",
+    "start": "nf start",
     "test": "mocha"
+    "postinstall": "bower install && grunt build",
   },
   "engines": {
     "node": "8.11.1",
