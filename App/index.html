@@ -3,7 +3,7 @@
 <header class='header' class='logo'>
 	<link rel="stylesheet" type="text/css" href="style.css">
 	<div>
-		<img class="logo" src="Media/logobannerVJ.png" alt="Logo">
+		<img class="logo" src="media/logobannerVJ.png" alt="Logo">
 	</div>
 </header>
 
@@ -11,17 +11,19 @@
 
 	<div class='main'>
 		<H1 class= 'title'> 
-		Select the day you would like for your appointment by clicking on the calendar  
-		or click here for <Button id='toggleMonth'>Next Month</Button> 
+			Click here to see schedule for <Button id='toggleMonth'>Next Month</Button> 
+			<label class = "instruction">Select a date, Select a Time, Fill out and submit form</label>
+
 		</H1>
 
 		<ul id='calendarUL'>
+			<label class = "instruction">Select a date, Select a Time, Fill out and submit form</label>
 		</ul>
 		
 		<ul class='dateTimeRead'>
-			<label> Available Times For Appointment: </label>
+			<label class="timeHead"> Available Times For Appointment: </label>
 			<label id='selectedDate'></label>
-			<div id='timeDisplay' class= 'timeDisplay'>
+			<div id='timeDisplay' class= 'timeDisplay' class=".btn-group-vertical">
 				
 			</div>
 		</ul>
@@ -36,11 +38,13 @@
 				<input type='email' name='eMail'>
 				Phone Number: <br>
 				<input type='text' name='phoneNumber'>
-				<button type = 'button' onClick='validateFormData()'> Submit </button>
+				<button class="addspace" type = 'button' onClick='validateFormData()'> Submit </button>
 			</form>
-			<button id='toAdmin' onClick='loadAdmin()'>Go to Admin</button>
-			<button onClick='cancelAppointment()'> Cancel a previously set Appointment</button>
+			<button class="addspace" id='toAdmin' onClick='loadAdmin()'>Go to Admin</button>
+			<button class="addspace" onClick='cancelAppointment()'> Cancel an Appointment</button>
 		</div>
+
+		
 		<br>
 		<div class="capbox">
 
