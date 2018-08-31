@@ -306,9 +306,6 @@ router.post('/', function(req, res, next) {
 		var duplicateChk
 		Client.findById(clientData._id).then(function(result) {
 			duplicateChk = result;
-			if(result !== null) {
-				chkDate = result.date
-			}
 			console.log(duplicateChk);
 			if(duplicateChk === null) {
 				var newClient = new Client({
@@ -319,6 +316,18 @@ router.post('/', function(req, res, next) {
 					date: clientData.date
 				})
 				newClient.save();
+				ClientInfo.findById(clientData._id).then(function(result2) {
+					if( result2 === null ) {
+						var newClientInfo = new ClientInfo({
+							_id: clientData._id,
+							firstName: clientData.firstName,
+							lastName: clientData.lastName,
+							eMail: clientData.eMail 
+						})
+						newClientInfo.save();
+						console.log('New Client Info Saved To Database')
+					}
+				})
 				transporter.sendMail({
 					from: '"James Accounting" <janodemailer@gmail.com>',
 					to: clientData.eMail,
@@ -340,33 +349,7 @@ router.post('/', function(req, res, next) {
 				});
 				res.send('Client Data Saved|'+clientData.date);
 			} else {
-				if(chkDate === null) {
-					Client.findByIdAndUpdate(clientData._id, {date: clientData.date}).then(function(result) {
-						console.log('Client Rescheduled Appointment');
-						transporter.sendMail({
-							from: '"James Accounting" <janodemailer@gmail.com>',
-							to: clientData.eMail,
-							subject: 'James Accounting Appointment Confirmation',
-							text: 'Your appointment with James Accounting has been scheduled for ' + clientData.date[0].split('2')[0] + ' '+ getOrdinal(clientData.date[1]) + ' ' + 'at' + ' ' + convertTimeString(clientData.date[2]+''), 
-						}, function(error, info) {
-							if(error) {
-								console.log(error)
-							} else {
-								console.log(info)
-							}
-						});
-						nexmo.message.sendSms(15186460734, '1' + clientData._id , 'Your appointment with James Accounting has been scheduled for ' + clientData.date[0].split('2')[0] + ' '+ getOrdinal(clientData.date[1]) + ' ' + 'at' + ' ' + convertTimeString(clientData.date[2]+''), function(err, responseData) {
-							if(err) {
-								console.log(err);
-							} else {
-								console.log('1' + clientData._id + ': Sent Confirmation Notice');
-							}
-						})
-					})
-					res.send('Client Data Saved|'+clientData.date);
-				} else {
-					res.send(clientData.date);
-				}
+				res.send(clientData.date);
 			}
 			res.end()
 		})
@@ -380,58 +363,52 @@ router.post('/', function(req, res, next) {
 			if(duplicateChk === null) {
 				res.send('No Appointment')
 			} else {
-				if(result.date !== null) {
-					var dateToEdit = result.date.split(',');
-				}
+				var dateToEdit = result.date.split(',');
 				console.log(duplicateChk)
 				console.log(dateToEdit);
-				if(result.date === null ) {
-					res.send('No Appointment')
-				} else {
-					Schedule.findByIdAndUpdate(dateToEdit[0]).then(function(result) {
-						var scheduleToEdit = result
-						scheduleToEdit.scheduleArray[dateToEdit[1]-1].forEach(function(time) {
-							if(time.includes('!') && time.includes(dateToEdit[2]) ) {
-								time = time.split('!')[1];
-							} 
-						})
-						Schedule.findByIdAndUpdate(dateToEdit[0],{scheduleArray: scheduleToEdit.scheduleArray} ).then(function(result) {
-							console.log('Updated')
-						})
+				Schedule.findByIdAndUpdate(dateToEdit[0]).then(function(result) {
+					var scheduleToEdit = result
+					scheduleToEdit.scheduleArray[dateToEdit[1]-1].forEach(function(time) {
+						if(time.includes('!') && time.includes(dateToEdit[2]) ) {
+							time = time.split('!')[1];
+						} 
 					})
-
-					Client.findByIdAndUpdate(phoneNumber, {date: null}).then(function(result) {
-						console.log(result);
-						transporter.sendMail({
-							from: '"James Accounting" <janodemailer@gmail.com>',
-							to: result.eMail,
-							subject: 'James Accounting Appointment Cancelled',
-							text: 'Your appointment with James Accounting for ' + dateToEdit[0].split('2')[0] + ' '+ getOrdinal(dateToEdit[1]) + ' ' + 'at' + ' ' + convertTimeString(dateToEdit[2]+ ' has been cancelled') 
-						}, function(error, info) {
-							if(error) {
-								console.log(error)
-							} else {
-								console.log(info)
-							}
-						});
-						nexmo.message.sendSms(15186460734, '1' + phoneNumber , 'Your appointment with James Accounting for ' + dateToEdit[0].split('2')[0] + ' '+ getOrdinal(dateToEdit[1]) + ' ' + 'at' + ' ' + convertTimeString(dateToEdit[2])+ ' has been cancelled', function(err, responseData) {
-							if(err) {
-								console.log(err);
-							} else {
-								console.log('1' + phoneNumber + ': Sent cancellation notice');
-							}
-						})	
-						res.send('Cancelled')
+					Schedule.findByIdAndUpdate(dateToEdit[0],{scheduleArray: scheduleToEdit.scheduleArray} ).then(function(result) {
+						console.log('Updated')
 					})
-				}
+				})
+					Client.findByIdAndDelete(phoneNumber).then(function(result) {
+					console.log(result);
+					transporter.sendMail({
+						from: '"James Accounting" <janodemailer@gmail.com>',
+						to: result.eMail,
+						subject: 'James Accounting Appointment Cancelled',
+						text: 'Your appointment with James Accounting for ' + dateToEdit[0].split('2')[0] + ' '+ getOrdinal(dateToEdit[1]) + ' ' + 'at' + ' ' + convertTimeString(dateToEdit[2]+ ' has been cancelled') 
+					}, function(error, info) {
+						if(error) {
+							console.log(error)
+						} else {
+							console.log(info)
+						}
+					});
+					nexmo.message.sendSms(15186460734, '1' + phoneNumber , 'Your appointment with James Accounting for ' + dateToEdit[0].split('2')[0] + ' '+ getOrdinal(dateToEdit[1]) + ' ' + 'at' + ' ' + convertTimeString(dateToEdit[2])+ ' has been cancelled', function(err, responseData) {
+						if(err) {
+							console.log(err);
+						} else {
+							console.log('1' + phoneNumber + ': Sent cancellation notice');
+						}
+					})	
+					res.send('Cancelled')
+				})
+			
 			}
 		})
 	}
 });
 
 
-router.use('/', express.static(path.join(__dirname + '/App')));
-router.use('/admin', express.static(path.join(__dirname + '/Admin')));
+router.use('/', express.static(path.join(__dirname, 'App')));
+router.use('/admin', express.static(path.join(__dirname, 'Admin')));
 
 
 // router.get('/', function(req, res, next) {
