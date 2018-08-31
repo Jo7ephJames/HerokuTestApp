@@ -242,6 +242,45 @@ router.post('/admin', function(req, res, next) {
 			res.end
 		})
 	}
+	if(protocol.includes('updateAndCancelScheduleData') ) {
+		console.log('Serving ',protocol,' request from Client ');
+		var scheduleId = protocol.split('|')[1];
+		console.log(scheduleId);
+		var updatedData = JSON.parse(protocol.split('|')[2])
+		console.log(updatedData);
+		var dateArray = JSON.parse(protocol.split('|')[3]);
+		var appointmentToCancel = JSON.parse(protocol.split('|')[3]).join(',')
+		console.log(appointmentToCancel);
+		var reason = protocol.split('|')[4];
+		console.log(reason);
+		Schedule.findByIdAndUpdate(scheduleId, {scheduleArray: updatedData}).then(function(result) {
+			console.log(result);
+			res.end
+		})
+		Client.findOneAndDelete({date: appointmentToCancel}).then(function(result) {
+			console.log(result);
+			transporter.sendMail({
+				from: '"James Accounting" <janodemailer@gmail.com>',
+				to: result.eMail,
+				subject: 'James Accounting Appointment Cancelled',
+				text: 'Your appointment with James Accounting for ' + dateArray[0].split('2')[0] + ' '+ getOrdinal(dateArray[1]) + ' ' + 'at' + ' ' + convertTimeString(dateArray[2]+ ' has been cancelled'+' Message:'+ reason) 
+			}, function(error, info) {
+				if(error) {
+					console.log(error)
+				} else {
+					console.log(info)
+				}
+			});
+			nexmo.message.sendSms(15186460734, '1' + result._id, 'Your appointment with James Accounting for ' + dateArray[0].split('2')[0] + ' '+ getOrdinal(dateArray[1]) + ' ' + 'at' + ' ' + convertTimeString(dateArray[2])+ ' has been cancelled'+' Message:'+ reason, function(err, responseData) {
+				if(err) {
+					console.log(err);
+				} else {
+					console.log('1' + result._id + ': Sent cancellation notice');
+				}
+			})
+
+		})
+	}
 });
 
 router.post('/', function(req, res, next) {
