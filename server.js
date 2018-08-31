@@ -6,7 +6,7 @@ var mongoose = require('mongoose'); //for connecting to Mongo Databse
 var Schedule = require('/app/models/appointmentschedule.js')
 var Client = require('/app/models/client.js')
 //twilio phone number +1786-481-4346 //password: dragonCo1nsFromMoonlight
-var ClientInfo = require('../AppointmentSetter/models/clientInfo.js')
+var ClientInfo = require('../app/models/clientInfo.js')
 var Nexmo = require('nexmo');
 var nexmo = new Nexmo({
 	apiKey: process.env.NEXMO_APIKEY,
