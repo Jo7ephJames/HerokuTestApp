@@ -114,28 +114,52 @@ var calendarData = {
 		})();
 	}
 
-	function runUpdateWithConfig() {
-		if(calendarData.currentMonthSwitch === true) {
-			select = appointmentData.thisMonthRef;
-			updatedData = appointmentData[appointmentData.thisMonthRef];
-			updateServer(select, updatedData);
+	function runUpdateWithConfig(appointment, prompt) {
+		if(arguments.length === 0) {
+			if(calendarData.currentMonthSwitch === true) {
+				select = appointmentData.thisMonthRef;
+				updatedData = appointmentData[appointmentData.thisMonthRef];
+				updateServer(select, updatedData);
+			} else {
+				select = appointmentData.nextMonthRef;
+				updatedData = appointmentData[appointmentData.nextMonthRef];
+				updateServer(select, updatedData);
+			}
 		} else {
-			select = appointmentData.nextMonthRef;
-			updatedData = appointmentData[appointmentData.nextMonthRef];
-			updateServer(select, updatedData);
+				if(calendarData.currentMonthSwitch === true) {
+				select = appointmentData.thisMonthRef;
+				updatedData = appointmentData[appointmentData.thisMonthRef];
+				updateServer(select, updatedData, appointment, prompt);
+					} else {
+				select = appointmentData.nextMonthRef;
+				updatedData = appointmentData[appointmentData.nextMonthRef];
+				updateServer(select, updatedData, appointment, prompt);
+			}
 		}
 	}
 
-	function updateServer(select, updatedData) {
-				(function reqFn() {
-			return new Promise(function(resolve, reject) {
-			var request = new XMLHttpRequest();
-			request.open('POST', '/admin');
-			
-		  	request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-		  	request.send('updateScheduleData|'+select+'|'+JSON.stringify(updatedData) );
-			})
-		})()
+	function updateServer(select, updatedData, appointment, prompt) {
+		if(arguments.length === 2) {
+			(function reqFn() {
+				return new Promise(function(resolve, reject) {
+				var request = new XMLHttpRequest();
+				request.open('POST', '/admin');
+				
+			  	request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+			  	request.send('updateScheduleData|'+select+'|'+JSON.stringify(updatedData) );
+				})
+			})()
+		} else {
+			(function reqFn() {
+				return new Promise(function(resolve, reject) {
+				var request = new XMLHttpRequest();
+				request.open('POST', '/admin');
+				
+			  	request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+			  	request.send('updateAndCancelScheduleData|'+select+'|'+JSON.stringify(updatedData)+'|'+JSON.stringify(appointment)+'|'+prompt);
+				})
+			})()
+		}
 	}
 
 
@@ -640,9 +664,38 @@ scheduleInterface.addTime.addEventListener('click', function(event) {
 scheduleInterface.timeDisplay.addEventListener('click', function(event) {
 	if(scheduleInterface.multiDateSwitch === false) {
 		if(event.target.className === 'deleteByX') {
-			scheduleSetter.deleteAvailability(scheduleInterface.currentSelection, event.target.id);
-			renderTimes();
-			runUpdateWithConfig();
+			if (scheduleInterface.currentSelection[event.target.id].includes('!') ) {
+				var month = calendarData.currentMonthSwitch ? appointmentData.thisMonthRef : appointmentData.nextMonthRef;
+				var day 
+				if(calendarData.currentMonthSwitch === true) {
+					calendarData.cellArray.forEach(function(cell) {
+						if(cell.className === 'selected') {
+							day = cell.id
+						}
+					})
+				} else {
+					calendarData.nextCellArray.forEach(function(cell) {
+						if(cell.className === 'selected') {
+							day = cell.id
+						}
+					})
+				}
+				var time = scheduleInterface.currentSelection[event.target.id].split('!')[0]	
+				var appointment = [month, day, time];
+				console.log(appointment)
+				var cancelAppointment = prompt('An appointment is scheduled for this time.  Type a reason for the cancellation and click OK to cancel, or click cancel to keep the appointment');
+				if(cancelAppointment === null) {
+					return;
+				} else {
+					scheduleSetter.deleteAvailability(scheduleInterface.currentSelection, event.target.id);
+					renderTimes();
+					runUpdateWithConfig(appointment, cancelAppointment);
+				} 
+			} else {
+				scheduleSetter.deleteAvailability(scheduleInterface.currentSelection, event.target.id);
+				renderTimes();
+				runUpdateWithConfig();
+			}
 		}
 	}
 	if(scheduleInterface.multiDateSwitch === true) {
