@@ -8,6 +8,11 @@ var Client = require('/app/models/client.js')
 //twilio phone number +1786-481-4346 //password: dragonCo1nsFromMoonlight
 var ClientInfo = require('../app/models/clientInfo.js')
 var Nexmo = require('nexmo');
+var User = require('../app/models/adminCredentials.js');
+var passport = require ('passport');
+var LocalStrategy = require('passport-local').Strategy;
+var session = require('express-session');
+
 var nexmo = new Nexmo({
 	apiKey: process.env.NEXMO_APIKEY,
 	apiSecret: process.env.NEXMO_APISECRET
@@ -166,22 +171,106 @@ function upDate() {
 
 upDate();
 
+// Setup Admin Credentials ---- Move credentials to ENV variables for Heroku
+var adminCreds = new User({
+	_id: 4777,
+	username: 'jaccadmin',
+	password: 'initialP4777',
+})
+
+var lgnUser
+var lgnPass
+
+User.findById(4777).then(function(result) {
+	if(result === null) {
+		adminCreds.save();
+		console.log("Admin Configured On Database Initialization");
+		lgnUser = result.username;
+		lgnPass = result.password;
+	} else {
+		console.log("Admin Exists")
+		lgnUser = result.username;
+		lgnPass = result.password;
+	} 
+})
+
 
 var app = express();
 port =  process.env.PORT || 8080
 
+app.use(session({
+    secret: 'secret',
+    saveUninitialized: true,
+    resave: true
+}));
+
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json({ type: 'application/*+json' }))
+app.use(passport.initialize());
+app.use(passport.session());
 
 router.get('/', function(req, res, next) {
 	console.log('Request Recieved');
 	next();
 })
 
-router.get('/admin', function(req, res, next) {
+router.get('/admin', ensureAuthenticated, function(req, res, next) {
 	console.log('Request Recieved');
 	next();
 })
+
+router.get('/login', function(req, res, next) {
+	console.log('Login Page Accesssed')
+	next();
+})
+
+router.get('/logout', function(req, res, next) {
+	console.log('Admin Logout')
+	req.logout();
+	res.redirect('/');
+	next();
+})
+
+passport.use(new LocalStrategy(
+  function(username, password, done) {
+    User.findOne({ username: username }, function (err, user) {
+    	console.log(user)
+      if (err) { return done(err); }
+      if (username !== lgnUser) {
+        return done(null, false, { message: 'Incorrect username.' });
+      }
+      if (password !== lgnPass) {
+        return done(null, false, { message: 'Incorrect password.' });
+      }
+	  return done(null, user);
+    });
+  }
+));
+
+passport.serializeUser(function(user, done) {
+  done(null, user.id);
+});
+
+passport.deserializeUser(function(id, done) {
+  User.findById(id, function(err, user) {
+    done(err, user);
+  });
+});
+
+router.post('/login', passport.authenticate('local', {successRedirect: '/admin', failureRedirect: '/login'}),
+  function(req, res) {
+  	console.log(req.user)
+    // If this function gets called, authentication was successful.
+    // `req.user` contains the authenticated user.
+});
+
+function ensureAuthenticated(req, res, next) {
+	if(req.isAuthenticated() ) {
+		return next();
+	} else {
+		res.redirect('/');
+	}
+}
 
 router.post('/admin', function(req, res, next) {
 	reqVal = req.body
@@ -449,7 +538,7 @@ router.post('/', function(req, res, next) {
 
 router.use('/', express.static(path.join(__dirname, 'App')));
 router.use('/admin', express.static(path.join(__dirname, 'Admin')));
-
+router.use('/login', express.static(path.join(__dirname, 'Login')));
 
 // router.get('/', function(req, res, next) {
 
