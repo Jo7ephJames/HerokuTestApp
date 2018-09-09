@@ -834,3 +834,7 @@ function renderTimes() {
 function loadMain() {
 	window.location.href = '/'
 }
+
+function logout() {
+	window.location.href = '/logout'
+}
