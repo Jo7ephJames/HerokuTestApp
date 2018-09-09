@@ -576,8 +576,8 @@ clientInterface.timeDisplay.addEventListener('click', function(event) {
 	}
 })
 
-function loadAdmin() {
-	window.location.href = '/Admin'
+function loadLogin() {
+	window.location.href = '/Login'
 }
 
 function reload() {
