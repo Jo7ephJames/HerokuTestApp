@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+
+<header>
+  <link rel="stylesheet" type="text/css" href="loginStyle.css">
+  <div>
+    <img class="logo" src="media/logobannerVJ.png" alt="Logo">
+  </div>
+</header>
+<body>
+    <form action="/login" method="post">
+        <div>
+            <label>Username:</label>
+            <input type="text" name="username"/>
+        </div>
+        <div>
+            <label>Password:</label>
+            <input type="password" name="password"/>
+        </div>
+        <div>
+            <input type="submit" value="Log In"/> <br>
+        </div>
+    </form>
+    <button onClick='loadMain()'> Return To Client </button>
+<script src="login.js"></script>
+</body>
