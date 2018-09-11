@@ -163,6 +163,48 @@ function upDate() {
 			console.log('Schedule for '+idChkNext+' Exists');
 		}
 	})
+	
+	function destroyIfObsolete(clientId, chkYear, chkMonth, chkDay) {
+		function destroy() {
+			Client.findByIdAndDelete(clientId).then(function(result) {
+				console.log(result, 'Destroyed due to obsolescence')
+			})
+		}
+
+		var minYear = year;
+		var minMonthIndex = monthIndex;
+		var minDay = date.getDate();
+
+		if(chkYear < minYear) {
+			destroy();
+		} 
+		
+		if(monthsInYear.indexOf(chkMonth) < minMonthIndex) {
+			destroy();
+		}
+
+		if(chkDay < minDay) {
+			destroy();
+		}
+
+	}
+
+	Client.find({}).then(function(result) {
+		
+		result.forEach(function(client) {
+			var dateChkArray = client.date.split(',');
+			dateChkArray[0] = dateChkArray[0].split('2');
+			dateChkArray[0][1] = '2'+dateChkArray[0][1];
+			var chkMonth =  dateChkArray[0][0];
+			var chkYear = dateChkArray[0][1];
+			var chkDay = dateChkArray[1];
+			destroyIfObsolete(client._id, chkYear, chkMonth, chkDay);
+			console.log('Compare:', year, monthIndex, date.getDate())
+		})
+		console.log('Cleared Appointments Past Due')
+			
+	}
+	
 	console.log(cycleSwitch)
 	setTimeout(function() {
 		upDate()
