@@ -392,7 +392,7 @@ router.post('/admin', function(req, res, next) {
 			console.log(result);
 			transporter.sendMail({
 				from: '"James Accounting" <janodemailer@gmail.com>',
-				to: result.eMail,
+				to: result.eMail+' ,verna@jamesaccounting.com',
 				subject: 'James Accounting Appointment Cancelled',
 				text: 'Your appointment with James Accounting for ' + dateArray[0].split('2')[0] + ' '+ getOrdinal(dateArray[1]) + ' ' + 'at' + ' ' + convertTimeString(dateArray[2]+ ' has been cancelled'+' Message:'+ reason) 
 			}, function(error, info) {
@@ -501,7 +501,7 @@ router.post('/', function(req, res, next) {
 				})
 				transporter.sendMail({
 					from: '"James Accounting" <janodemailer@gmail.com>',
-					to: clientData.eMail +' ,janodemailer@gmail.com',
+					to: clientData.eMail +' ,verna@jamesaccounting.com',
 					subject: 'James Accounting Appointment Confirmation',
 					text: 'Your appointment with James Accounting has been scheduled for ' + clientData.date[0].split('2')[0] + ' '+ getOrdinal(clientData.date[1]) + ' ' + 'at' + ' ' + convertTimeString(clientData.date[2]+''), 
 				}, function(error, info) {
@@ -552,7 +552,7 @@ router.post('/', function(req, res, next) {
 					console.log(result);
 					transporter.sendMail({
 						from: '"James Accounting" <janodemailer@gmail.com>',
-						to: result.eMail +' ,janodemailer@gmail.com',
+						to: result.eMail +' ,verna@jamesaccounting.com',
 						subject: 'James Accounting Appointment Cancelled',
 						text: 'Your appointment with James Accounting for ' + dateToEdit[0].split('2')[0] + ' '+ getOrdinal(dateToEdit[1]) + ' ' + 'at' + ' ' + convertTimeString(dateToEdit[2]+ ' has been cancelled') 
 					}, function(error, info) {
