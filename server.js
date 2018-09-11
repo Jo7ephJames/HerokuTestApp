@@ -174,8 +174,8 @@ upDate();
 // Setup Admin Credentials ---- Move credentials to ENV variables for Heroku
 var adminCreds = new User({
 	_id: 4777,
-	username: 'jaccadmin',
-	password: 'initialP4777',
+	username: process.env.ADMIN_USER,
+	password: process.env.ADMIN_PASS,
 })
 
 var lgnUser
