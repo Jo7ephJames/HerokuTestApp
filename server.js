@@ -203,7 +203,7 @@ function upDate() {
 		})
 		console.log('Cleared Appointments Past Due')
 			
-	}
+	})
 	
 	console.log(cycleSwitch)
 	setTimeout(function() {
