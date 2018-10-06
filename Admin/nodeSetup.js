@@ -171,8 +171,15 @@ var appointmentData = {
 		var monthIndex = calendarData.date.getMonth();
 		var totalDays = calendarData.daysInAMonth[monthIndex]
 		var month = calendarData.monthsInYear[monthIndex];
+		function createDayIndexes() {
+			dayObjectsArray = [];
+			for(var i = 0; i < totalDays; i++) {
+				dayObjectsArray.push([]);
+			}
+			return dayObjectsArray;
+		};
 		appointmentData.thisMonthRef = month+year;
-		appointmentData[month+year] = 
+		appointmentData[month+year] = createDayIndexes();
 		matchIndexToDay[month+year] = {
 			dayByIndex: [],
 			indexesForDay: {},
