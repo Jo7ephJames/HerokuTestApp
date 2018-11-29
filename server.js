@@ -127,11 +127,11 @@ function upDate() {
 	var cycleSwitch = cycle-date;
 
 	function createDayArray(index) {
-	resultArray = [];
-	for(var x = 0; x < daysInAMonth[index] + 1; x++) {
-		resultArray.push([]);
-	}
-	return resultArray;
+		resultArray = [];
+		for(var x = 0; x < daysInAMonth[index] ; x++) {
+			resultArray.push([]);
+		}
+		return resultArray;
 	}
 
 	var thisMonthSchedule = new Schedule({
@@ -163,7 +163,7 @@ function upDate() {
 			console.log('Schedule for '+idChkNext+' Exists');
 		}
 	})
-	
+
 	function destroyIfObsolete(clientId, chkYear, chkMonth, chkDay) {
 		function destroy() {
 			Client.findByIdAndDelete(clientId).then(function(result) {
@@ -201,10 +201,10 @@ function upDate() {
 			destroyIfObsolete(client._id, chkYear, chkMonth, chkDay);
 			console.log('Compare:', year, monthIndex, date.getDate())
 		})
-		console.log('Cleared Appointments Past Due')
+		console.log('destroyIfObsolete ran')
 			
 	})
-	
+
 	console.log(cycleSwitch)
 	setTimeout(function() {
 		upDate()
@@ -216,8 +216,8 @@ upDate();
 // Setup Admin Credentials ---- Move credentials to ENV variables for Heroku
 var adminCreds = new User({
 	_id: 4777,
-	username: process.env.ADMIN_USER,
-	password: process.env.ADMIN_PASS,
+	username: 'jaccadmin',
+	password: 'initialP4777',
 })
 
 var lgnUser
@@ -236,9 +236,8 @@ User.findById(4777).then(function(result) {
 	} 
 })
 
-
 var app = express();
-port =  process.env.PORT || 8080
+port = 4777
 
 app.use(session({
     secret: 'secret',
@@ -252,7 +251,9 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 router.get('/', function(req, res, next) {
+	req.logout();
 	console.log('Request Recieved');
+	console.log('Authenticantion Check:', req.isAuthenticated())
 	next();
 })
 
@@ -299,6 +300,7 @@ passport.deserializeUser(function(id, done) {
   });
 });
 
+
 router.post('/login', passport.authenticate('local', {successRedirect: '/admin', failureRedirect: '/login'}),
   function(req, res) {
   	console.log(req.user)
@@ -315,6 +317,7 @@ function ensureAuthenticated(req, res, next) {
 }
 
 router.post('/admin', function(req, res, next) {
+			
 	reqVal = req.body
 	var protocol
 	var scheduleData 
@@ -343,7 +346,7 @@ router.post('/admin', function(req, res, next) {
 			console.log(filledAppointments)
 		})
 		Schedule.findById(scheduleId).then(function(result) {
-			var scheduleData = result
+			var scheduleData = result;
 			filledAppointments.forEach(function(date, x) {
 				dateArray = date.split(',')
 				console.log(dateArray);
@@ -362,7 +365,7 @@ router.post('/admin', function(req, res, next) {
 			res.end()
 		})
 	}
-	if(protocol.includes('updateSchedule') ) {
+	if(protocol.includes('updateScheduleData') ) {
 		console.log('Serving ',protocol,' request from Client ')
 		var scheduleId = protocol.split('|')[1];
 		console.log(scheduleId);
@@ -374,7 +377,7 @@ router.post('/admin', function(req, res, next) {
 		})
 	}
 	if(protocol.includes('updateAndCancelScheduleData') ) {
-		console.log('Serving ',protocol,' request from Client ');
+		console.log('Serving ',protocol,' request from Client ')
 		var scheduleId = protocol.split('|')[1];
 		console.log(scheduleId);
 		var updatedData = JSON.parse(protocol.split('|')[2])
@@ -395,18 +398,6 @@ router.post('/admin', function(req, res, next) {
 				to: result.eMail,
 				subject: 'James Accounting Appointment Cancelled',
 				text: 'Your appointment with James Accounting for ' + dateArray[0].split('2')[0] + ' '+ getOrdinal(dateArray[1]) + ' ' + 'at' + ' ' + convertTimeString(dateArray[2]+ ' has been cancelled'+' Message:'+ reason) 
-			}, function(error, info) {
-				if(error) {
-					console.log(error)
-				} else {
-					console.log(info)
-				}
-			});
-			transporter.sendMail({
-				from: '"James Accounting" <janodemailer@gmail.com>',
-				to: 'verna@jamesaccounting.com',
-				subject: 'James Accounting Appointment Cancelled',
-				text: result.lastName+' '+result.firstName+' Your appointment with James Accounting for ' + dateArray[0].split('2')[0] + ' '+ getOrdinal(dateArray[1]) + ' ' + 'at' + ' ' + convertTimeString(dateArray[2]+ ' has been cancelled'+' Message:'+ reason) 
 			}, function(error, info) {
 				if(error) {
 					console.log(error)
@@ -453,15 +444,15 @@ router.post('/', function(req, res, next) {
 			console.log(filledAppointments)
 		})
 		Schedule.findById(scheduleId).then(function(result) {
-			var scheduleData = result;
-			filledAppointments.forEach(function(date, x) {
+			var scheduleData = result
+			filledAppointments.forEach(function(date) {
 				dateArray = date.split(',')
 				console.log(dateArray);
 				if(dateArray[0] === scheduleId) {
 					var timeArray = scheduleData.scheduleArray[dateArray[1]-1]
 					timeArray.forEach(function(time, i) {
 						if(time === dateArray[2]) {
-							timeArray[i] = timeArray[i] + '!' + clientName[x]
+							timeArray.splice(i, 1);
 							console.log(timeArray);
 						}
 					})
@@ -523,18 +514,6 @@ router.post('/', function(req, res, next) {
 						console.log(info)
 					}
 				});
-				transporter.sendMail({
-					from: '"James Accounting" <janodemailer@gmail.com>',
-					to: 'verna@jamesaccounting.com',
-					subject: 'James Accounting Appointment Confirmation',
-					text: clientData.firstName +' '+ clientData.lastName+' Your appointment with James Accounting has been scheduled for ' + clientData.date[0].split('2')[0] + ' '+ getOrdinal(clientData.date[1]) + ' ' + 'at' + ' ' + convertTimeString(clientData.date[2]+''),
-				}, function(error, info) {
-					if(error) {
-						console.log(error)
-					} else {
-						console.log(info)
-					}
-				});
 				nexmo.message.sendSms(15186460734, '1' + clientData._id, 'Your appointment with James Accounting has been scheduled for ' + clientData.date[0].split('2')[0] + ' '+ getOrdinal(clientData.date[1]) + ' ' + 'at' + ' ' + convertTimeString(clientData.date[2]+''), function(err, responseData) {
 					if(err) {
 						console.log(err);
@@ -579,18 +558,6 @@ router.post('/', function(req, res, next) {
 						to: result.eMail,
 						subject: 'James Accounting Appointment Cancelled',
 						text: 'Your appointment with James Accounting for ' + dateToEdit[0].split('2')[0] + ' '+ getOrdinal(dateToEdit[1]) + ' ' + 'at' + ' ' + convertTimeString(dateToEdit[2]+ ' has been cancelled') 
-					}, function(error, info) {
-						if(error) {
-							console.log(error)
-						} else {
-							console.log(info)
-						}
-					});
-					transporter.sendMail({
-						from: '"James Accounting" <janodemailer@gmail.com>',
-						to: 'verna@jamesaccounting.com',
-						subject: 'James Accounting Appointment Cancelled',
-						text: result.firstName +' '+ result.lastName +' Your appointment with James Accounting for ' + dateToEdit[0].split('2')[0] + ' '+ getOrdinal(dateToEdit[1]) + ' ' + 'at' + ' ' + convertTimeString(dateToEdit[2]+ ' has been cancelled') 
 					}, function(error, info) {
 						if(error) {
 							console.log(error)
