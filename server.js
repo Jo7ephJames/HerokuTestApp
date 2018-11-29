@@ -128,7 +128,7 @@ function upDate() {
 
 	function createDayArray(index) {
 	resultArray = [];
-	for(var x = 0; x < daysInAMonth[index]; x++) {
+	for(var x = 0; x < daysInAMonth[index] + 1; x++) {
 		resultArray.push([]);
 	}
 	return resultArray;
@@ -151,7 +151,7 @@ function upDate() {
 
 	var nextMonthSchedule = new Schedule({
 		_id: nextMonth+year,
-		scheduleArray: createDayArray(monthIndex)
+		scheduleArray: createDayArray(nextMonthIndex)
 	})
 	var idChkNext = nextMonth+year;
 
