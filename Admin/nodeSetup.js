@@ -88,7 +88,22 @@ var calendarData = {
 			request.send('sendDate');
 		})
 	}
+	function colorCodeAvailability(array) {
+		//Adds color to calendar cells that have available dates called in getSchedules 
+		array.forEach(function(day, i) {
+			if(day.length === 0) {
 
+			} else {
+				if(calendarData.currentMonthSwitch === true) {
+					//color code current month
+					calendarData.cellArray[i].classList.add('availableDate');
+				} else {
+					//color code next month
+					calendarData.nextCellArray[i].classList.add('availableDate');
+				}
+			}
+		})
+	}
 	var resp
 	function getSchedules(select) {
 		(function reqFn() {
@@ -104,8 +119,10 @@ var calendarData = {
 		  		resolve(resp)
 		  		if(calendarData.currentMonthSwitch ===  true) {
 		  			calendarData.cellArray[todayIndex-1].click();
+					colorCodeAvailability(appointmentData[appointmentData.thisMonthRef]);
 		  		} else {
 		  			calendarData.nextCellArray[0].click();
+					colorCodeAvailability(appointmentData[appointmentData.nextMonthRef]);
 		  		}
 		  	};	
 		  	request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -548,6 +565,11 @@ clientInterface.calendarCells.addEventListener('click', function(event) {
 		calendarData.nextCellArray.forEach(function(cell) {
 			cell.classList.remove("selected");
 		})
+		if(calendarData.currentMonthSwitch === true) {
+			colorCodeAvailability(appointmentData[appointmentData.thisMonthRef]); 
+		} else {
+			colorCodeAvailability(appointmentData[appointmentData.nextMonthRef]);
+		}
 		calendarData.nameOfDayArray.forEach(function(cell) {
 			cell.classList.remove("selected");
 		}) 
