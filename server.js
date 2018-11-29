@@ -453,15 +453,15 @@ router.post('/', function(req, res, next) {
 			console.log(filledAppointments)
 		})
 		Schedule.findById(scheduleId).then(function(result) {
-			var scheduleData = result
-			filledAppointments.forEach(function(date) {
+			var scheduleData = result;
+			filledAppointments.forEach(function(date, x) {
 				dateArray = date.split(',')
 				console.log(dateArray);
 				if(dateArray[0] === scheduleId) {
 					var timeArray = scheduleData.scheduleArray[dateArray[1]-1]
 					timeArray.forEach(function(time, i) {
 						if(time === dateArray[2]) {
-							timeArray.splice(i, 1);
+							timeArray[i] = timeArray[i] + '!' + clientName[x]
 							console.log(timeArray);
 						}
 					})
