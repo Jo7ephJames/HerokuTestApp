@@ -507,6 +507,11 @@ clientInterface.calendarCells.addEventListener('click', function(event) {
 		calendarData.nextCellArray.forEach(function(cell) {
 			cell.classList.remove("selected");
 		})
+		if(calendarData.currentMonthSwitch === true) {
+			colorCodeAvailability(appointmentData[appointmentData.thisMonthRef]); 
+		} else {
+			colorCodeAvailability(appointmentData[appointmentData.nextMonthRef]);
+		}
 		calendarData.nameOfDayArray.forEach(function(cell) {
 			cell.classList.remove("selected");
 		}) 
@@ -565,11 +570,6 @@ clientInterface.calendarCells.addEventListener('click', function(event) {
 		calendarData.nextCellArray.forEach(function(cell) {
 			cell.classList.remove("selected");
 		})
-		if(calendarData.currentMonthSwitch === true) {
-			colorCodeAvailability(appointmentData[appointmentData.thisMonthRef]); 
-		} else {
-			colorCodeAvailability(appointmentData[appointmentData.nextMonthRef]);
-		}
 		calendarData.nameOfDayArray.forEach(function(cell) {
 			cell.classList.remove("selected");
 		}) 
