@@ -143,7 +143,7 @@ function validateFormData() {
 		var enterLast = 'Please enter your last name in the appropriate field \n'
 		var invalidEmail = 'Enter your e-mail address in the correct format  \n'
 		var invalidNumber = 'Enter the your phone number in one of the following formats XXX-XXX-XXXX and XXXXXXXXXX \n'
-		var selectDate = 'Select a date for your appoinment \n'
+		var selectDate = 'Select a valid date and time for your appoinment \n'
 		var errorMessage = 'In order to schedule an appointment \n' 
 		if(formData.firstName.trim() === '') {
 			errorMessage = errorMessage + enterFirst
