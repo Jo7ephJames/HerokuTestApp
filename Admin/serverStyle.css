@@ -121,6 +121,9 @@ td.pastDate {
 	font-weight: 100;
 	font-size: 10px;
 }
+td.availableDate {
+  background-color: lightgreen;
+}
 td.noDate {
 	background-color: lightgrey;
 }
