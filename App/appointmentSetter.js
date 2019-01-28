@@ -116,10 +116,10 @@ function getSchedules(select) {
 		  			resolve(resp)
 		  			if(calendarData.currentMonthSwitch ===  true) {
 		  				calendarData.cellArray[todayIndex-1].click();
-		  				colorCodeAvailability(appointmentData[appointmentData.thisMonthRef]);
+		  				//colorCodeAvailability(appointmentData[appointmentData.thisMonthRef]);
 		  			} else {
 		  				calendarData.nextCellArray[0].click();
-		  				colorCodeAvailability(appointmentData[appointmentData.nextMonthRef]);
+		  				//colorCodeAvailability(appointmentData[appointmentData.nextMonthRef]);
 		  			}
 		  		};	
 		  		request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
