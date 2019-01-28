@@ -479,7 +479,7 @@ router.post('/', function(req, res, next) {
 		Client.findById(clientData._id).then(function(result) {
 			duplicateChk = result;
 			console.log(duplicateChk);
-			if(duplicateChk === null) {
+			
 				var newClient = new Client({
 					_id: clientData._id,
 					firstName: clientData.firstName,
@@ -520,9 +520,7 @@ router.post('/', function(req, res, next) {
 					}
 				});
 				res.send('Client Data Saved|'+clientData.date);
-			} else {
-				res.send(clientData.date);
-			}
+			
 			res.end()
 		})
 	}
