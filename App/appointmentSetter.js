@@ -92,7 +92,9 @@ function colorCodeAvailability(array) {
 		} else {
 			if(calendarData.currentMonthSwitch === true) {
 				//color code current month
-				//calendarData.cellArray[i].classList.add('availableDate');
+				if(i+1 >= calendarData.date.getDate() ) {
+				calendarData.cellArray[i].classList.add('availableDate');
+				}
 			} else {
 				//color code next month
 				//calendarData.nextCellArray[i].classList.add('availableDate');
