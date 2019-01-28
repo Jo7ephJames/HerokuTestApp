@@ -198,7 +198,7 @@ function upDate() {
 			var chkMonth =  dateChkArray[0][0];
 			var chkYear = dateChkArray[0][1];
 			var chkDay = dateChkArray[1];
-			destroyIfObsolete(client._id, chkYear, chkMonth, chkDay);
+			//destroyIfObsolete(client._id, chkYear, chkMonth, chkDay);
 			console.log('Compare:', year, monthIndex, date.getDate())
 		})
 		console.log('Cleared Appointments Past Due')
