@@ -97,7 +97,7 @@ function colorCodeAvailability(array) {
 				}
 			} else {
 				//color code next month
-				//calendarData.nextCellArray[i].classList.add('availableDate');
+				calendarData.nextCellArray[i].classList.add('availableDate');
 			}
 		}
 	})
