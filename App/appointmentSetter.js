@@ -92,10 +92,10 @@ function colorCodeAvailability(array) {
 		} else {
 			if(calendarData.currentMonthSwitch === true) {
 				//color code current month
-				calendarData.cellArray[i].classList.add('availableDate');
+				//calendarData.cellArray[i].classList.add('availableDate');
 			} else {
 				//color code next month
-				calendarData.nextCellArray[i].classList.add('availableDate');
+				//calendarData.nextCellArray[i].classList.add('availableDate');
 			}
 		}
 	})
