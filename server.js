@@ -393,7 +393,7 @@ router.post('/admin', function(req, res, next) {
 			console.log(result);
 			transporter.sendMail({
 				from: '"James Accounting" <janodemailer@gmail.com>',
-				to: result.eMail,
+				to: result.eMail, 'verna@jamesaccounting.com',
 				subject: 'James Accounting Appointment Cancelled',
 				text: 'Your appointment with James Accounting for ' + dateArray[0].split('2')[0] + ' '+ getOrdinal(dateArray[1]) + ' ' + 'at' + ' ' + convertTimeString(dateArray[2]+ ' has been cancelled'+' Message:'+ reason) 
 			}, function(error, info) {
