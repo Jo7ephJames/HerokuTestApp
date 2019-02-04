@@ -502,6 +502,18 @@ router.post('/', function(req, res, next) {
 				})
 				transporter.sendMail({
 					from: '"James Accounting" <janodemailer@gmail.com>',
+					to: 'verna@jamesaccounting.com',
+					subject: 'James Accounting Appointment Confirmation',
+					text: 'You have an appoint with' + ' ' + clientData.firstName + ' on ' + clientData.date[0].split('2')[0] + ' '+ getOrdinal(clientData.date[1]) + ' ' + 'at' + ' ' + convertTimeString(clientData.date[2]+' Phone: ' + clientData._id + ' Email: '+ clientData.eMail), 
+				}, function(error, info) {
+					if(error) {
+						console.log(error)
+					} else {
+						console.log(info)
+					}
+				});
+				transporter.sendMail({
+					from: '"James Accounting" <janodemailer@gmail.com>',
 					to: clientData.eMail + ' ,verna@jamesaccounting.com',
 					subject: 'James Accounting Appointment Confirmation',
 					text: 'Your appointment with James Accounting has been scheduled for ' + clientData.date[0].split('2')[0] + ' '+ getOrdinal(clientData.date[1]) + ' ' + 'at' + ' ' + convertTimeString(clientData.date[2]+''), 
